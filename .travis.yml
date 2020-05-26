@@ -13,7 +13,7 @@ after_success:
    - docker build -t poojchou/multi-nginx ./nginx
    - docker build -t poojchou/multi-server ./server
    - docker build -t poojchou/multi-worker ./worker
-
+#corrected password
    - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
    - docker push poojchou/multi-client
    - docker push poojchou/multi-nginx 
