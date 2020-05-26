@@ -1,0 +1,21 @@
+sudo: required
+services:
+  - docker
+
+before_install:
+   - docker build -t poojchou/react-test -f ./client/Dockerfile.dev ./client
+   
+script:
+   - docker run -e CI=true poojchou/react-test npm test
+
+after_success:
+   - docker build -t poojchou/multi-client ./client
+   - docker build -t poojchou/multi-nginx ./nginx
+   - docker build -t poojchou/multi-server ./server
+   - docker build -t poojchou/multi-worker ./worker
+
+   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+   - docker push poojchou/multi-client
+   - docker push poojchou/multi-nginx 
+   - docker push poojchou/multi-server
+   - docker push poojchou/multi-worker
